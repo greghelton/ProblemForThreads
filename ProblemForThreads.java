@@ -22,7 +22,7 @@ class AddMillion extends Thread {
 	}
 	void incrCompletedThreadCount() {
 		completedThreadCount++;
-		System.out.printf( "%s %21s %17d%n", getName(), "incrCompletedThread()", System.nanoTime()/1000 );
+		System.out.printf( "%s %21s %17d%n", getName(), "incrCompletedThread()", endTime );
 		synchronized(caller) {
 			caller.notifyAll();
 		}
@@ -51,7 +51,7 @@ public class ProblemForThreads extends Thread {
 			System.out.println("interruped");
 		}
 		
-		endTime = System.nanoTime()/1000;
+		endTime = System.nanoTime();
 		long threadTotalTime = 0;
 		for ( int x = 0; x < threads.length; x++ ) {
 			long tempTime = threads[x].endTime - threads[x].startTime;
@@ -61,7 +61,11 @@ public class ProblemForThreads extends Thread {
 		
 		System.out.printf( "%n%48s", "=====");
 		System.out.printf( "%n%41s %6d", " Total thread time =", threadTotalTime );
-		System.out.printf( "%n%41s %6d", "Total program time =", (System.nanoTime() - startTime)/1000 );
+		System.out.printf( "%n");
+		System.out.printf( "%n%30s %17d ", "Program End Time", endTime/1000 );
+		System.out.printf( "%n%30s %17d ", "Program Start Time", startTime/1000 );
+		System.out.printf( "%n%48s", "=====");
+		System.out.printf( "%n%41s %6d", "Total program time =", (endTime - startTime)/1000 );
 		System.out.println();
 	}
 
