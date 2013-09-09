@@ -3,9 +3,9 @@ class AddMillion extends Thread {
 	static int completedThreadCount = 0;
 	Object caller;
 	final int beginning;
-	final int end;
+	int end;
 	final long startTime = System.nanoTime()/1000;
-	final long endTime;
+	long endTime;
 	AddMillion( Object caller, int beginning, String name ) {
 		super( name );
 		this.caller = caller;
