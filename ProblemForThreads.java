@@ -14,7 +14,8 @@ class AddMillion extends Thread {
 	@Override
 	public void run() {
 		end = beginning;
-		for (int x = 0; x < 1000000; x++ ) {
+		for (int x = 0; x < 500; x++ ) {
+			try {sleep( (int)(Math.random() * 10) );} catch(InterruptedException e) {}
 			end += x;
 		}
 		endTime = System.nanoTime()/1000;
@@ -22,7 +23,7 @@ class AddMillion extends Thread {
 	}
 	void incrCompletedThreadCount() {
 		completedThreadCount++;
-		System.out.printf( "%s %21s %17d%n", getName(), "incrCompletedThread()", endTime );
+		System.out.printf( "%s %21s %17d %n", getName(), "incrCompletedThread()", endTime );
 		synchronized(caller) {
 			caller.notifyAll();
 		}
@@ -44,11 +45,16 @@ public class ProblemForThreads extends Thread {
 		}
 		try {
 			synchronized( this ) {
- 				wait(); //wait () method releases the lock prior to waiting and reacquires prior to returning from wait ()
+				System.out.println( "waiting" );
+				int interruptedCount = 0;
+				while (interruptedCount < threads.length ) {
+ 					wait(); // releases the lock prior to waiting and reacquires prior to returning from wait ()
+					interruptedCount++;
+				}
 				System.out.printf( "%24s %17d%n", "out of wait()", System.nanoTime()/1000 );
 			}
 		} catch( InterruptedException e ) {
-			System.out.println("interruped");
+			System.out.println("interruped #2");
 		}
 		
 		endTime = System.nanoTime();
@@ -59,13 +65,13 @@ public class ProblemForThreads extends Thread {
 			System.out.printf( "%n%s %17d - %17d = %5d", threads[x].getName(), threads[x].endTime, threads[x].startTime, tempTime );
 		}
 		
-		System.out.printf( "%n%48s", "=====");
-		System.out.printf( "%n%41s %6d", " Total thread time =", threadTotalTime );
+		System.out.printf( "%n%50s", "=========");
+		System.out.printf( "%n%41s %8d", " Total thread time =", threadTotalTime );
 		System.out.printf( "%n");
-		System.out.printf( "%n%30s %17d ", "Program End Time", endTime/1000 );
-		System.out.printf( "%n%30s %17d ", "Program Start Time", startTime/1000 );
-		System.out.printf( "%n%48s", "=====");
-		System.out.printf( "%n%41s %6d", "Total program time =", (endTime - startTime)/1000 );
+		System.out.printf( "%n%32s %17d ", "Program End Time", endTime/1000 );
+		System.out.printf( "%n%32s %17d ", "Program Start Time", startTime/1000 );
+		System.out.printf( "%n%50s", "=========");
+		System.out.printf( "%n%41s %8d", "Total program time =", (endTime - startTime)/1000 );
 		System.out.println();
 	}
 
